@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusKudi - Admin Panel</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .admin-wrapper {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+      background: #f5f5f5;
+    }
+
+    .admin-sidebar {
+      background: #1a1a1a;
+      color: white;
+      padding: 2rem 1rem;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 250px;
+      overflow-y: auto;
+    }
+
+    .admin-sidebar h2 {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #333;
+      font-size: 18px;
+    }
+
+    .admin-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .admin-menu-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .admin-menu-item:hover {
+      background: #ff1493;
+      padding-left: 1.5rem;
+    }
+
+    .admin-menu-item.active {
+      background: #ff1493;
+      border-left: 3px solid white;
+      padding-left: 0.75rem;
+    }
+
+    .admin-main {
+      grid-column: 2;
+      padding: 2rem;
+      margin-left: 0;
+    }
+
+    .admin-header {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-header h1 {
+      margin: 0;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .admin-user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-avatar {
+      width: 40px;
+      height: 40px;
+      background: #ff1493;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .admin-logout-btn {
+      background: #ff1493;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .admin-logout-btn:hover {
+      background: #ff69b4;
+    }
+
+    .admin-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-section {
+      display: none;
+    }
+
+    .admin-section.active {
+      display: block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 14px;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .admin-table th {
+      background: #f5f5f5;
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 2px solid #ddd;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .admin-table tr:hover {
+      background: #f9f9f9;
+    }
+
+    .admin-action-btn {
+      padding: 0.4rem 0.8rem;
+      margin: 0 0.25rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: #2196f3;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #1976d2;
+    }
+
+    .btn-delete {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #da190b;
+    }
+
+    .btn-view {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #388e3c;
+    }
+
+    .form-container {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-btn-primary {
+      background: #ff1493;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+      margin-right: 0.5rem;
+    }
+
+    .admin-btn-primary:hover {
+      background: #ff69b4;
+    }
+
+    .admin-btn-secondary {
+      background: #ddd;
+      color: #333;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .admin-btn-secondary:hover {
+      background: #bbb;
+    }
+
+    .notification {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .notification.error {
+      background: #fee;
+      color: #c33;
+      border: 1px solid #fcc;
+      display: block;
+    }
+
+    .notification.success {
+      background: #efe;
+      color: #3c3;
+      border: 1px solid #cfc;
+      display: block;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
+    }
+
+    .empty-state svg {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .admin-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+      }
+
+      .admin-main {
+        grid-column: 1;
+        padding: 1rem;
+        margin-left: 0;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        font-size: 12px;
+      }
+
+      .admin-table th,
+      .admin-table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <h2>🔐 Admin</h2>
+      <div class="admin-menu">
+        <div class="admin-menu-item active" data-section="dashboard">📊 Dashboard</div>
+        <div class="admin-menu-item" data-section="products">👗 Products</div>
+        <div class="admin-menu-item" data-section="categories">📂 Categories</div>
+        <div class="admin-menu-item" data-section="orders">📦 Orders</div>
+        <div class="admin-menu-item" data-section="users">👥 Users</div>
+        <div class="admin-menu-item" data-section="reviews">⭐ Reviews</div>
+        <div class="admin-menu-item" data-section="coupons">🎟️ Coupons</div>
+        <div class="admin-menu-item" data-section="analytics">📈 Analytics</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+      <!-- Header -->
+      <div class="admin-header">
+        <h1>Admin Panel</h1>
+        <div class="admin-user-info">
+          <div class="admin-avatar" id="adminInitial">A</div>
+          <div>
+            <div id="adminName">Admin</div>
+            <small id="adminEmail"></small>
+          </div>
+          <button class="admin-logout-btn" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+        <div id="notificationArea"></div>
+
+        <!-- Dashboard Section -->
+        <div class="admin-section active" id="dashboard">
+          <h2>Dashboard</h2>
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+              <h3>Total Users</h3>
+              <div class="number" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Total Products</h3>
+              <div class="number" id="totalProducts">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Total Orders</h3>
+              <div class="number" id="totalOrders">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Total Revenue</h3>
+              <div class="number" id="totalRevenue">₹0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="admin-section" id="products">
+          <h2>Manage Products</h2>
+          <div class="form-container">
+            <h3>Add New Product</h3>
+            <form id="productForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Product Name</label>
+                  <input type="text" id="productName" placeholder="e.g., Pink Hoodie" required>
+                </div>
+                <div class="form-group">
+                  <label>Price (₹)</label>
+                  <input type="number" id="productPrice" placeholder="999" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Discount (%)</label>
+                  <input type="number" id="productDiscount" placeholder="10" min="0" max="100">
+                </div>
+                <div class="form-group">
+                  <label>Stock</label>
+                  <input type="number" id="productStock" placeholder="50" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="productDescription" placeholder="Product description..." rows="3"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <input type="text" id="productCategory" placeholder="e.g., Hoodies">
+                </div>
+                <div class="form-group">
+                  <label>Available Sizes (comma separated)</label>
+                  <input type="text" id="productSizes" placeholder="XS, S, M, L, XL">
+                </div>
+              </div>
+              <button type="submit" class="admin-btn-primary">Add Product</button>
+            </form>
+          </div>
+
+          <h3>Products List</h3>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">No products yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="admin-section" id="orders">
+          <h2>Manage Orders</h2>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td colspan="6" class="empty-state">No orders yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Users Section -->
+        <div class="admin-section" id="users">
+          <h2>Manage Users</h2>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">No users yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="admin-section" id="reviews">
+          <h2>Manage Reviews</h2>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>User</th>
+                  <th>Rating</th>
+                  <th>Comment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reviewsTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">No reviews yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Coupons Section -->
+        <div class="admin-section" id="coupons">
+          <h2>Manage Coupons</h2>
+          <div class="form-container">
+            <h3>Create New Coupon</h3>
+            <form id="couponForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Coupon Code</label>
+                  <input type="text" id="couponCode" placeholder="e.g., SAVE20" required>
+                </div>
+                <div class="form-group">
+                  <label>Discount (%)</label>
+                  <input type="number" id="couponDiscount" placeholder="20" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Max Uses</label>
+                  <input type="number" id="couponMaxUses" placeholder="100" required>
+                </div>
+                <div class="form-group">
+                  <label>Expiry Date</label>
+                  <input type="date" id="couponExpiry" required>
+                </div>
+              </div>
+              <button type="submit" class="admin-btn-primary">Create Coupon</button>
+            </form>
+          </div>
+
+          <h3>Coupons List</h3>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Discount</th>
+                  <th>Uses</th>
+                  <th>Expiry</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="couponsTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">No coupons yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="admin-section" id="categories">
+          <h2>Manage Categories</h2>
+          <div class="form-container">
+            <h3>Add New Category</h3>
+            <form id="categoryForm">
+              <div class="form-group">
+                <label>Category Name</label>
+                <input type="text" id="categoryName" placeholder="e.g., Hoodies" required>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="categoryDescription" placeholder="Category description..." rows="3"></textarea>
+              </div>
+              <button type="submit" class="admin-btn-primary">Add Category</button>
+            </form>
+          </div>
+
+          <h3>Categories List</h3>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody">
+                <tr>
+                  <td colspan="3" class="empty-state">No categories yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="admin-section" id="analytics">
+          <h2>Analytics</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Monthly Revenue</h3>
+              <div class="number" id="monthlyRevenue">₹0</div>
+            </div>
+            <div class="stat-card">
+              <h3>New Users (This Month)</h3>
+              <div class="number" id="newUsers">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Avg Order Value</h3>
+              <div class="number" id="avgOrderValue">₹0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Total Reviews</h3>
+              <div class="number" id="totalReviews">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/admin.js"></script>
+</body>
+</html>

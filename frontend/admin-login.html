@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusKudi - Admin Login</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .admin-login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+    }
+
+    .admin-login-form {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .admin-login-form h1 {
+      text-align: center;
+      color: #ff1493;
+      margin-bottom: 0.5rem;
+      font-size: 28px;
+    }
+
+    .admin-login-form p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 14px;
+    }
+
+    .admin-login-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-login-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .admin-login-form input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .admin-login-form input:focus {
+      outline: none;
+      border-color: #ff1493;
+      box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.1);
+    }
+
+    .admin-login-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .admin-login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 20, 147, 0.3);
+    }
+
+    .admin-login-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .admin-notification {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 6px;
+      display: none;
+    }
+
+    .admin-notification.error {
+      background: #fee;
+      color: #c33;
+      border: 1px solid #fcc;
+      display: block;
+    }
+
+    .admin-notification.success {
+      background: #efe;
+      color: #3c3;
+      border: 1px solid #cfc;
+      display: block;
+    }
+
+    .admin-login-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #ff1493;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-login-container">
+    <div class="admin-login-form">
+      <h1>CampusKudi</h1>
+      <p>Admin Panel Login</p>
+
+      <div id="notificationMessage" class="admin-notification"></div>
+
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label for="adminEmail">Admin Email</label>
+          <input 
+            type="email" 
+            id="adminEmail" 
+            placeholder="admin@campuskudi.com" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input 
+            type="password" 
+            id="adminPassword" 
+            placeholder="Enter your password" 
+            required
+          >
+        </div>
+
+        <button type="submit" class="admin-login-btn">
+          <span id="buttonText">Login to Admin Panel</span>
+          <span id="loadingSpinner" style="display: none;" class="loading"></span>
+        </button>
+      </form>
+
+      <div class="admin-login-footer">
+        <p>© 2024 CampusKudi Admin Panel</p>
+        <p>Secure authentication required</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/admin-login.js"></script>
+</body>
+</html>
