@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - CampusKudi</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .cart-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo">CampusKudi</a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/">Home</a></li>
+                <li class="nav-item"><a href="/collection.html">Collection</a></li>
+                <li class="nav-item"><a href="/cart.html">Cart</a></li>
+            </ul>
+
+            <div id="auth-buttons" class="auth-buttons">
+                <a href="/login.html" class="btn-secondary">Login</a>
+                <a href="/signup.html" class="btn-primary">Sign Up</a>
+            </div>
+
+            <div id="user-menu" class="user-menu">
+                <a href="/account.html">
+                    <span id="user-name">User</span>
+                </a>
+                <button class="btn-secondary" onclick="logoutUser()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; font-size: 14px; color: #666;">
+        <a href="/index.html">Home</a> / Shopping Cart
+    </div>
+
+    <!-- Cart Content -->
+    <div class="cart-wrapper">
+        <!-- Cart Items -->
+        <div>
+            <h1 style="margin-bottom: 2rem;">Shopping Cart</h1>
+            <div id="cart-items">
+                <div style="text-align: center; padding: 3rem;">
+                    <div class="loading"></div>
+                    <p>Loading cart...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div id="cart-totals"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #333; color: white; padding: 3rem 2rem; text-align: center; margin-top: 3rem;">
+        <p>&copy; 2024 CampusKudi. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/cart.js"></script>
+</body>
+</html>
